@@ -4,7 +4,6 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const routes = require("./routes/api-routes");
 
 // Configure body parser for AJAX requests
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,7 +15,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 //Add routes
-app.use(routes);
+require("./routes/api-routes")(app);
 
 // Set up promises with mongoose
 mongoose.Promise = global.Promise;

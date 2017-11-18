@@ -5,7 +5,9 @@ const db = require("../models");
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-const scrapeArticles = (req, res) => {
+/* Begin article CRUD functions */
+
+scrapeArticles = (req, res) => {
 	//gets the html body of the request
 	axios
 		.get("https://www.reddit.com/r/popular/")
@@ -32,19 +34,114 @@ const scrapeArticles = (req, res) => {
 		})
 		.catch(err => console.log(err));
 };
-// Defining methods for the routes
-/* GET - Scrape Reddit */
 
-/* GET - get all articles from Mongo */
+getAllArticles = (req, res) => {
+	db.Article
+		.find({})
+		.populate("comments")
+		.sort({ _id: -1 })
+		.then(allArticles => {
+			// res.render("index", allArticles);
+			res.json(allArticles);
+		});
+};
 
-/* POST - save an article */
+getAllSavedArticles = (req, res) => {
+	db.Article
+		.find({ isSaved: true })
+		.populate("comments")
+		.sort({ _id: -1 })
+		.then(allSaved => {
+			// res.render("index", allSaved);
+			res.json(allSaved);
+		});
+};
 
-/* UPDATE - unsave an article */
+saveArticle = (req, res) => {
+	db.Article
+		.findOneAndUpdate(
+			{ _id: req.params.id },
+			{ $set: { isSaved: true } },
+			{ new: true }
+		)
+		.then(savedArticle => {
+			res.json(savedArticle);
+		});
+};
 
-router.route("/test").post((req, res) => {
-	console.log("Test post route worked!");
-});
+unsaveArticle = (req, res) => {
+	db.Article
+		.findOneAndUpdate(
+			{ _id: req.params.id },
+			{ $set: { isSaved: false } },
+			{ new: true }
+		)
+		.then(data => {
+			res.json(data);
+		});
+};
 
-router.route("/api/articles/scrape").post(scrapeArticles);
+/* End article CRUD functions */
 
-module.exports = router;
+/* Begin comments CRUD functions */
+
+addComment = (req, res) => {
+	db.Comments
+		.create(req.body)
+		.then(newComment => {
+			return db.Article.findOneAndUpdate(
+				{ _id: req.params.id },
+				{ $push: { comments: newComment._id } },
+				{ new: true }
+			);
+		})
+		.then(data => {
+			res.json(data);
+		});
+};
+
+deleteComment = (req, res) => {};
+
+/* End comments CRUD functions */
+
+module.exports = app => {
+	/* Article routes */
+
+	//GET - Scrape Reddit and store articles to db
+	app.post("/api/articles/scrape", (req, res) => scrapeArticles());
+
+	//GET - get all articles from db
+	app.get("/api/articles", (req, res) => getAllArticles(req, res));
+
+	//GET - get all saved articles from db
+	app.get("/api/articles/saved", (req, res) => getAllSavedArticles(req, res));
+
+	//POST - save a specific article
+	app.post("/api/articles/:id/save", (req, res) => saveArticle(req, res));
+
+	//UPDATE - unsave a specific article
+	app.post("/api/articles/:id/unsave", (req, res) => unsaveArticle(req, res));
+
+	/* Comment routes */
+
+	//POST - Create a new comment and add (update) it to an article
+	app.post("/api/articles/:id/comments/add", (req, res) =>
+		addComment(req, res)
+	);
+
+	//POST - delete a comment and remove (update) it from all articles (only can be in one)
+	app.post("/api/articles/comments/:id/delete", (req, res) => {
+		db.Comments.remove({ _id: req.params.id }).then(() => {
+			db.Article
+				.update(
+					{ comments: req.params.id },
+					//removes a specific index of the comments array where id matches
+					{ $pullAll: { comments: [{ _id: req.params.id }] } }
+				)
+				//UN NEST THIS SHIT
+				.then(data => {
+					res.json(data);
+				});
+		});
+	});
+};
