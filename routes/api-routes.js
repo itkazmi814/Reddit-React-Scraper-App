@@ -57,6 +57,19 @@ getAllSavedArticles = (req, res) => {
 		});
 };
 
+searchForArticles = (req, res) => {
+	console.log("Back end entering searchForArticles: ", req.params.topic);
+	db.Article
+		.find({ title: { $regex: `.*${req.params.topic}.*`, $options: "i" } })
+		.populate("comments")
+		.sort({ _id: -1 })
+		.then(searchResults => {
+			console.log("results");
+			console.log(searchResults);
+			res.json(true);
+		});
+};
+
 saveArticle = (req, res) => {
 	db.Article
 		.findOneAndUpdate(
@@ -100,13 +113,25 @@ addComment = (req, res) => {
 		});
 };
 
-deleteComment = (req, res) => {};
+deleteComment = (req, res) => {
+	db.Comments.remove({ _id: req.params.id }).then(() => {
+		db.Article
+			.update(
+				{ comments: req.params.id },
+				//removes a specific index of the comments array where id matches
+				{ $pullAll: { comments: [{ _id: req.params.id }] } }
+			)
+			//UN NEST THIS SHIT
+			.then(data => {
+				res.json(data);
+			});
+	});
+};
 
 /* End comments CRUD functions */
 
 module.exports = app => {
 	/* Article routes */
-
 	//GET - Scrape Reddit and store articles to db
 	app.post("/api/articles/scrape", (req, res) => scrapeArticles());
 
@@ -116,6 +141,11 @@ module.exports = app => {
 	//GET - get all saved articles from db
 	app.get("/api/articles/saved", (req, res) => getAllSavedArticles(req, res));
 
+	//GET - get all articles with specific parameters from db
+	app.get("/api/articles/search/topic/:topic", (req, res) =>
+		searchForArticles(req, res)
+	);
+
 	//POST - save a specific article
 	app.post("/api/articles/:id/save", (req, res) => saveArticle(req, res));
 
@@ -123,25 +153,13 @@ module.exports = app => {
 	app.post("/api/articles/:id/unsave", (req, res) => unsaveArticle(req, res));
 
 	/* Comment routes */
-
 	//POST - Create a new comment and add (update) it to an article
 	app.post("/api/articles/:id/comments/add", (req, res) =>
 		addComment(req, res)
 	);
 
 	//POST - delete a comment and remove (update) it from all articles (only can be in one)
-	app.post("/api/articles/comments/:id/delete", (req, res) => {
-		db.Comments.remove({ _id: req.params.id }).then(() => {
-			db.Article
-				.update(
-					{ comments: req.params.id },
-					//removes a specific index of the comments array where id matches
-					{ $pullAll: { comments: [{ _id: req.params.id }] } }
-				)
-				//UN NEST THIS SHIT
-				.then(data => {
-					res.json(data);
-				});
-		});
-	});
+	app.post("/api/articles/comments/:id/delete", (req, res) =>
+		deleteComment(req, res)
+	);
 };
