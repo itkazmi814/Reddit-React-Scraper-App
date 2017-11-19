@@ -7,15 +7,10 @@ import {
   Redirect
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Jumbotron from "./components/Jumbotron";
-import MainContent from "./components/MainContent";
 
-const App = () => (
-  <div>
-    <Navbar />
-    <Jumbotron />
-    <MainContent />
-  </div>
-);
+import MainPage from "./components/MainPage";
+import SavedPage from "./components/SavedPage";
+
+const App = () => <Navbar />;
 
 export default App;

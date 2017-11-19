@@ -66,7 +66,7 @@ searchForArticles = (req, res) => {
 		.then(searchResults => {
 			console.log("results");
 			console.log(searchResults);
-			res.json(true);
+			res.json(searchResults);
 		});
 };
 
@@ -142,9 +142,9 @@ module.exports = app => {
 	app.get("/api/articles/saved", (req, res) => getAllSavedArticles(req, res));
 
 	//GET - get all articles with specific parameters from db
-	app.get("/api/articles/search/topic/:topic", (req, res) =>
-		searchForArticles(req, res)
-	);
+	app.get("/api/articles/search/topic/:topic", (req, res) => {
+		searchForArticles(req, res);
+	});
 
 	//POST - save a specific article
 	app.post("/api/articles/:id/save", (req, res) => saveArticle(req, res));

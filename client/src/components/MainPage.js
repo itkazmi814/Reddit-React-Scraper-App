@@ -1,12 +1,22 @@
 import React, { Component } from "react";
 import API from "../utils/API";
+import Article from "./Article";
+import Jumbotron from "./Jumbotron";
 
-class MainContent extends Component {
+class MainPage extends Component {
 	state = {
 		search: {
 			topic: "",
 			subreddit: ""
-		}
+		},
+
+		articles: []
+	};
+
+	componentDidMount = () => {
+		API.getAllArticles().then(response => {
+			this.setState({ articles: response.data });
+		});
 	};
 
 	handleInputChange = event => {
@@ -17,13 +27,15 @@ class MainContent extends Component {
 	handleSearchSubmit = event => {
 		event.preventDefault();
 		console.log("Searching for topic: ", this.state.search.topic);
-		API.searchForArticles(this.state.search.topic);
+		API.searchForArticles(this.state.search.topic).then(response => {
+			this.setState({ articles: response.data });
+		});
 	};
 
 	render() {
 		return (
 			<div>
-				<div>Hello world this is the MainContent section1!! </div>
+				<Jumbotron />
 				<form class="col-6">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Topic</label>
@@ -52,9 +64,13 @@ class MainContent extends Component {
 						Search
 					</button>
 				</form>
+
+				{this.state.articles.map((article, i) => (
+					<Article key={i} {...article} />
+				))}
 			</div>
 		);
 	}
 }
 
-export default MainContent;
+export default MainPage;
