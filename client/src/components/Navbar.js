@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
 import MainPage from "./MainPage";
 import SavedPage from "./SavedPage";
 
@@ -49,7 +54,7 @@ const Navbar = () => (
           </a>
         </div>
       </nav>
-
+      <Redirect path="/" to="/main" />
       <Route path="/main" component={MainPage} />
       <Route path="/saved" component={SavedPage} />
     </div>
