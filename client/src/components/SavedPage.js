@@ -9,7 +9,6 @@ class SavedPage extends Component {
 
 	componentDidMount = () => {
 		API.getAllSavedArticles().then(response => {
-			console.log(response.data);
 			this.setState({ articles: response.data });
 		});
 	};

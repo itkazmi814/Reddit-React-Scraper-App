@@ -19,6 +19,12 @@ class MainPage extends Component {
 		});
 	};
 
+	handleScrapeArticles = () => {
+		API.scrapeArticles().then(() => {
+			this.componentDidMount();
+		});
+	};
+
 	handleInputChange = event => {
 		const { name, value } = event.target;
 		this.setState({ search: { ...this.state.search, [name]: value } });
@@ -35,9 +41,9 @@ class MainPage extends Component {
 	render() {
 		return (
 			<div>
-				<Jumbotron />
+				<Jumbotron handleScrapeArticles={this.handleScrapeArticles} />
 				<form class="col-6">
-					<div class="form-group">
+					<div class="form-group d-inline-block">
 						<label for="exampleInputEmail1">Topic</label>
 						<input
 							value={this.state.search.topic}
@@ -49,7 +55,7 @@ class MainPage extends Component {
 							placeholder="Enter topic"
 						/>
 					</div>
-					<div class="form-group">
+					<div class="form-group d-inline-block">
 						<label for="exampleInputPassword1">Subreddit</label>
 						<input
 							value={this.state.search.subreddit}

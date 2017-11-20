@@ -7,11 +7,7 @@ const Navbar = () => (
   <Router>
     <div>
       <nav class="navbar navbar-expand-lg navbar-light bg-light col-12">
-        <a
-          class="navbar-brand"
-          href="https://www.reddit.com/r/popular"
-          target="_blank"
-        >
+        <a class="navbar-brand" href="https://www.reddit.com/r/popular">
           <i class="fa fa-reddit" aria-hidden="true" /> reddit.com/r/popular
         </a>
         <button
@@ -55,7 +51,6 @@ const Navbar = () => (
           </ul>
           <a
             href="https://github.com/itkazmi814/MongoDB-Mongoose-Scraping"
-            target="_blank"
             class="navbar-text"
           >
             <i class="fa fa-github mx-2" aria-hidden="true" />Check it out on

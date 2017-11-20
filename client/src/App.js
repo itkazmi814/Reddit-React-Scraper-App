@@ -1,15 +1,6 @@
-import React, { Component } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch,
-  Redirect
-} from "react-router-dom";
-import Navbar from "./components/Navbar";
+import React from "react";
 
-import MainPage from "./components/MainPage";
-import SavedPage from "./components/SavedPage";
+import Navbar from "./components/Navbar";
 
 const App = () => <Navbar />;
 

@@ -29,7 +29,6 @@ scrapeArticles = (req, res) => {
 			});
 		})
 		.then(() => {
-			console.log("Done scraping articles");
 			res.json(false);
 		})
 		.catch(err => console.log(err));
@@ -58,7 +57,6 @@ getAllSavedArticles = (req, res) => {
 };
 
 searchForArticles = (req, res) => {
-	console.log("Back end entering searchForArticles: ", req.params.topic);
 	db.Article
 		.find({ title: { $regex: `.*${req.params.topic}.*`, $options: "i" } })
 		.populate("comments")
@@ -133,10 +131,14 @@ deleteComment = (req, res) => {
 module.exports = app => {
 	/* Article routes */
 	//GET - Scrape Reddit and store articles to db
-	app.post("/api/articles/scrape", (req, res) => scrapeArticles());
+	app.post("/api/articles/scrape", (req, res) => {
+		scrapeArticles(req, res);
+	});
 
 	//GET - get all articles from db
-	app.get("/api/articles", (req, res) => getAllArticles(req, res));
+	app.get("/api/articles", (req, res) => {
+		getAllArticles(req, res);
+	});
 
 	//GET - get all saved articles from db
 	app.get("/api/articles/saved", (req, res) => getAllSavedArticles(req, res));

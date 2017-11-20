@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default {
   scrapeArticles: () => {
-    return axios.get("/api/articles/scrape");
+    return axios.post("/api/articles/scrape");
   },
 
   getAllArticles: () => {
