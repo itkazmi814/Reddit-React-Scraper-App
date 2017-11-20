@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import API from "../utils/API";
-import Article from "./Article";
 import Jumbotron from "./Jumbotron";
 import Search from "./Search";
+import ArticleContainer from "./ArticleContainer";
 
 class MainPage extends Component {
 	state = {
@@ -47,10 +47,7 @@ class MainPage extends Component {
 					handleInputChange={this.handleInputChange}
 					handleSearchSubmit={this.handleSearchSubmit}
 				/>
-
-				{this.state.articles.map((article, i) => (
-					<Article key={i} {...article} />
-				))}
+				<ArticleContainer articles={this.state.articles} />
 			</div>
 		);
 	}

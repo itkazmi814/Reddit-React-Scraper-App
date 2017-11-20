@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import API from "../utils/API";
-import Article from "./Article";
+import ArticleContainer from "./ArticleContainer";
 
 class SavedPage extends Component {
 	state = {
@@ -14,13 +14,7 @@ class SavedPage extends Component {
 	};
 
 	render() {
-		return (
-			<div>
-				{this.state.articles.map((article, i) => (
-					<Article key={i} {...article} />
-				))}
-			</div>
-		);
+		return <ArticleContainer articles={this.state.articles} />;
 	}
 }
 

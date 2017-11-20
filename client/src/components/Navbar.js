@@ -23,16 +23,7 @@ const Navbar = () => (
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item ">
-              <button
-                type="button"
-                id="scrape-btn"
-                class="btn btn-success d-inline-block"
-              >
-                <i class="fa fa-plus mr-2" aria-hidden="true" /> Get more
-                articles!
-              </button>
-            </li>
+            <li class="nav-item " />
             <li class="nav-item ">
               <Link to="/main">
                 <a class="nav-link d-inline-block mx-4">
