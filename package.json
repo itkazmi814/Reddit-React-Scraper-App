@@ -4,7 +4,7 @@
   "description": "Mern Demo",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon server.js",
+    "server": "node server.js",
     "client": "cd client && npm run start",
     "start": "concurrently \"node server.js\" \"npm run client\"",
     "build": "cd client && npm run build",
