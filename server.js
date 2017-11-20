@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const PORT = process.env.PORT || 3001;
+const port = process.env.PORT || 3001;
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -33,6 +33,6 @@ app.get("*", function(req, res) {
 	res.sendFile(path.join(__dirname, "./client/public/index.html"));
 });
 
-app.listen(PORT, function() {
-	console.log(`🌎 ==> Server now on port ${PORT}!`);
+app.listen(port, function() {
+	console.log(`🌎 ==> Server now on port ${port}!`);
 });
