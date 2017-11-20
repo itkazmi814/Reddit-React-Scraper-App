@@ -95,17 +95,31 @@ unsaveArticle = (req, res) => {
 /* End article CRUD functions */
 
 /* Begin comments CRUD functions */
+getComments = (req, res) => {
+	console.log(req.params.id);
+	db.Article
+		.findOne({
+			_id: req.params.id
+		})
+		.populate("comments")
+		.then(fullArticleInfo => {
+			res.json(fullArticleInfo);
+		});
+};
 
 addComment = (req, res) => {
 	console.log("back end body:", req.body.body);
 	db.Comments
 		.create({ body: req.body.body })
 		.then(newComment => {
-			return db.Article.findOneAndUpdate(
-				{ _id: req.params.id },
-				{ $push: { comments: newComment._id } },
-				{ new: true }
-			);
+			return db.Article
+				.findOneAndUpdate(
+					{ _id: req.params.id },
+					{ $push: { comments: newComment._id } },
+					{ new: true }
+				)
+				.populate("comments")
+				.sort({ _id: -1 });
 		})
 		.then(data => {
 			res.json(data);
@@ -156,6 +170,9 @@ module.exports = app => {
 	app.post("/api/articles/:id/unsave", (req, res) => unsaveArticle(req, res));
 
 	/* Comment routes */
+	//GET - display comments for a specific article
+	app.get("/api/articles/:id", (req, res) => getComments(req, res));
+
 	//POST - Create a new comment and add (update) it to an article
 	app.post("/api/articles/:id/comments/add", (req, res) =>
 		addComment(req, res)

@@ -31,7 +31,11 @@ export default {
     });
   },
 
-  deleteComment: articleId => {
-    return axios.post(`/api/articles/${articleId}/comments/delete`);
+  deleteComment: commentId => {
+    return axios.post(`/api/articles/comments/${commentId}/delete`);
+  },
+
+  getComments: articleId => {
+    return axios.get(`/api/articles/${articleId}`);
   }
 };

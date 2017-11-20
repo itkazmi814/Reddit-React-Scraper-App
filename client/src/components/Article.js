@@ -37,14 +37,26 @@ class Article extends Component {
 	handleCommentCreation = event => {
 		event.preventDefault();
 		console.log("Start create new comment", this.state.newComment);
-		console.log(this.props._id);
-		API.addComment(this.props._id, this.state.newComment).then(() => {
-			console.log("Adding comment");
-			this.setState({
-				comments: [...this.state.comments, this.state.newComment],
-				newComment: ""
-			});
-		});
+		API.addComment(this.props._id, this.state.newComment)
+			.then(response => {
+				this.setState({
+					comments: response.data.comments,
+					newComment: ""
+				});
+			})
+			.then(() => console.log("newComment is now: ", this.state.newComment));
+	};
+
+	handleCommentDeletion = event => {
+		console.log("Now deleting comment");
+		console.log(event.target);
+		console.log(event.target.id);
+		API.deleteComment(event.target.id)
+			.then(() => {
+				console.log("comment deleted");
+				return API.getComments(this.props._id);
+			})
+			.then(response => this.setState({ comments: response.data.comments }));
 	};
 
 	render() {
@@ -94,6 +106,7 @@ class Article extends Component {
 							comments={this.state.comments}
 							newComment={this.state.newComment}
 							handleCommentCreation={this.handleCommentCreation}
+							handleCommentDeletion={this.handleCommentDeletion}
 							handleInputChange={this.handleInputChange}
 						/>
 					</div>
