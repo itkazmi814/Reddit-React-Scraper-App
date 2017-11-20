@@ -13,10 +13,7 @@ app.use(bodyParser.json());
 // if (process.env.NODE_ENV === "production") {
 // 	app.use(express.static("./client/public/index"));
 // }
-app.use(
-	"/static",
-	express.static(path.join(__dirname, "./client/public/index"))
-);
+app.use(express.static(path.join(__dirname, "./client/public/index")));
 
 //Add routes
 require("./routes/api-routes")(app);
