@@ -97,8 +97,9 @@ unsaveArticle = (req, res) => {
 /* Begin comments CRUD functions */
 
 addComment = (req, res) => {
+	console.log("back end body:", req.body.body);
 	db.Comments
-		.create(req.body)
+		.create({ body: req.body.body })
 		.then(newComment => {
 			return db.Article.findOneAndUpdate(
 				{ _id: req.params.id },

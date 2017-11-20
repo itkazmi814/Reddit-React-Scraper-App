@@ -3,7 +3,7 @@ import React from "react";
 const Comment = props => (
 	<div class="card-body p-2">
 		<div class="d-inline-block delete-comment-btn btn btn-alert">
-			<i class="fa fa-trash-o" aria-hidden="true" />
+			<b>X</b>
 		</div>
 		<div class="d-inline-block">
 			<p> {props.body} </p>

@@ -5,7 +5,8 @@ import CommentContainer from "./CommentContainer";
 class Article extends Component {
 	state = {
 		isSaved: "",
-		comments: ""
+		comments: [],
+		newComment: ""
 	};
 
 	componentDidMount = () => {
@@ -28,6 +29,24 @@ class Article extends Component {
 		}
 	};
 
+	handleInputChange = event => {
+		const { value } = event.target;
+		this.setState({ newComment: value });
+	};
+
+	handleCommentCreation = event => {
+		event.preventDefault();
+		console.log("Start create new comment", this.state.newComment);
+		console.log(this.props._id);
+		API.addComment(this.props._id, this.state.newComment).then(() => {
+			console.log("Adding comment");
+			this.setState({
+				comments: [...this.state.comments, this.state.newComment],
+				newComment: ""
+			});
+		});
+	};
+
 	render() {
 		return (
 			<div>
@@ -41,7 +60,7 @@ class Article extends Component {
 						<button
 							onClick={this.handleSaveChange}
 							type="button"
-							class="d-inline-block save-article-btn btn btn-info mb-2"
+							class="d-inline-block save-article-btn btn btn-info mr-2 mb-2"
 						>
 							{this.state.isSaved === "true" ? (
 								<i class="fa fa-bookmark" aria-hidden="true" />
@@ -51,13 +70,34 @@ class Article extends Component {
 						</button>
 						<button
 							type="button"
-							class="d-inline-block view-comments-btn btn btn-warning mb-2"
+							data-toggle="collapse"
+							data-target={`#${this.props._id}`}
+							aria-controls={this.props._id}
+							aria-expanded="false"
+							class="d-inline-block view-comments-btn btn btn-warning mr-2 mb-2"
 						>
-							<i class="fa fa-pencil" aria-hidden="true" /> | 0
+							{this.state.comments.length === 0 ? (
+								<span>
+									<i class="fa fa-pencil" aria-hidden="true" /> <span>| 0</span>{" "}
+								</span>
+							) : (
+								<span>
+									<i class="fa fa-comments-o" aria-hidden="true" />{" "}
+									<span>| {this.state.comments.length} </span>{" "}
+								</span>
+							)}
 						</button>
 					</div>
+					<div id={this.props._id} class="collapse">
+						<CommentContainer
+							articleId={this.props._id}
+							comments={this.state.comments}
+							newComment={this.state.newComment}
+							handleCommentCreation={this.handleCommentCreation}
+							handleInputChange={this.handleInputChange}
+						/>
+					</div>
 				</div>
-				<CommentContainer comments={this.state.comments} />
 			</div>
 		);
 	}

@@ -25,8 +25,10 @@ export default {
     return axios.post(`/api/articles/${articleId}/unsave`);
   },
 
-  addComment: articleId => {
-    return axios.post(`/api/articles/${articleId}/comments/add`);
+  addComment: (articleId, newComment) => {
+    return axios.post(`/api/articles/${articleId}/comments/add`, {
+      body: newComment
+    });
   },
 
   deleteComment: articleId => {
