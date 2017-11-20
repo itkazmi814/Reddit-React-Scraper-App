@@ -27,7 +27,7 @@ const Navbar = () => (
             <li class="nav-item ">
               <Link to="/main">
                 <a class="nav-link d-inline-block mx-4">
-                  <i class="fa fa-bookmark mr-2" aria-hidden="true" /> Home{" "}
+                  <i class="fa fa-home mr-2" aria-hidden="true" /> Home{" "}
                 </a>
               </Link>
             </li>

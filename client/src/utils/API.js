@@ -25,6 +25,10 @@ export default {
     return axios.post(`/api/articles/${articleId}/unsave`);
   },
 
+  getComments: articleId => {
+    return axios.get(`/api/article/${articleId}`);
+  },
+
   addComment: (articleId, newComment) => {
     return axios.post(`/api/articles/${articleId}/comments/add`, {
       body: newComment
@@ -33,9 +37,5 @@ export default {
 
   deleteComment: commentId => {
     return axios.post(`/api/articles/comments/${commentId}/delete`);
-  },
-
-  getComments: articleId => {
-    return axios.get(`/api/articles/${articleId}`);
   }
 };

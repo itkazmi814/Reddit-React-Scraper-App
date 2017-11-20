@@ -28,9 +28,7 @@ scrapeArticles = (req, res) => {
 				db.Article.create(article);
 			});
 		})
-		.then(() => {
-			res.json(false);
-		})
+		.then(() => res.json(false))
 		.catch(err => console.log(err));
 };
 
@@ -40,7 +38,6 @@ getAllArticles = (req, res) => {
 		.populate("comments")
 		.sort({ _id: -1 })
 		.then(allArticles => {
-			// res.render("index", allArticles);
 			res.json(allArticles);
 		});
 };
@@ -51,7 +48,6 @@ getAllSavedArticles = (req, res) => {
 		.populate("comments")
 		.sort({ _id: -1 })
 		.then(allSaved => {
-			// res.render("index", allSaved);
 			res.json(allSaved);
 		});
 };
@@ -62,8 +58,6 @@ searchForArticles = (req, res) => {
 		.populate("comments")
 		.sort({ _id: -1 })
 		.then(searchResults => {
-			console.log("results");
-			console.log(searchResults);
 			res.json(searchResults);
 		});
 };
@@ -96,7 +90,6 @@ unsaveArticle = (req, res) => {
 
 /* Begin comments CRUD functions */
 getComments = (req, res) => {
-	console.log(req.params.id);
 	db.Article
 		.findOne({
 			_id: req.params.id
@@ -108,7 +101,6 @@ getComments = (req, res) => {
 };
 
 addComment = (req, res) => {
-	console.log("back end body:", req.body.body);
 	db.Comments
 		.create({ body: req.body.body })
 		.then(newComment => {
@@ -134,7 +126,6 @@ deleteComment = (req, res) => {
 				//removes a specific index of the comments array where id matches
 				{ $pullAll: { comments: [{ _id: req.params.id }] } }
 			)
-			//UN NEST THIS SHIT
 			.then(data => {
 				res.json(data);
 			});
@@ -171,7 +162,7 @@ module.exports = app => {
 
 	/* Comment routes */
 	//GET - display comments for a specific article
-	app.get("/api/articles/:id", (req, res) => getComments(req, res));
+	app.get("/api/article/:id", (req, res) => getComments(req, res));
 
 	//POST - Create a new comment and add (update) it to an article
 	app.post("/api/articles/:id/comments/add", (req, res) =>

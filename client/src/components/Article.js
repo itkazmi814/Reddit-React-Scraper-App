@@ -10,7 +10,6 @@ class Article extends Component {
 	};
 
 	componentDidMount = () => {
-		console.log(this.props.isSaved, this.props.comments);
 		this.setState({
 			isSaved: this.props.isSaved.toString(),
 			comments: this.props.comments
@@ -36,24 +35,17 @@ class Article extends Component {
 
 	handleCommentCreation = event => {
 		event.preventDefault();
-		console.log("Start create new comment", this.state.newComment);
-		API.addComment(this.props._id, this.state.newComment)
-			.then(response => {
-				this.setState({
-					comments: response.data.comments,
-					newComment: ""
-				});
-			})
-			.then(() => console.log("newComment is now: ", this.state.newComment));
+		API.addComment(this.props._id, this.state.newComment).then(response => {
+			this.setState({
+				comments: response.data.comments,
+				newComment: ""
+			});
+		});
 	};
 
 	handleCommentDeletion = event => {
-		console.log("Now deleting comment");
-		console.log(event.target);
-		console.log(event.target.id);
 		API.deleteComment(event.target.id)
 			.then(() => {
-				console.log("comment deleted");
 				return API.getComments(this.props._id);
 			})
 			.then(response => this.setState({ comments: response.data.comments }));
