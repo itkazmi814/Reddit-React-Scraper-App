@@ -10,9 +10,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-	app.use(express.static("./client/public/index"));
-}
+// if (process.env.NODE_ENV === "production") {
+// 	app.use(express.static("./client/public/index"));
+// }
+app.use("/static", express.static(path.join(__dirname, "client/build")));
 
 //Add routes
 require("./routes/api-routes")(app);
