@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
-	app.use(express.static("./client/public/index"));
+	app.use(express.static("./client/build/static/index"));
 }
 // app.use(express.static(path.join(__dirname, "client/public")));
 
