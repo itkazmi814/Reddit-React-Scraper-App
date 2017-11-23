@@ -1,7 +1,7 @@
 import React from "react";
 
-import Navbar from "./components/Navbar";
+import MainContainer from "./components/MainContainer";
 
-const App = () => <Navbar />;
+const App = () => <MainContainer />;
 
 export default App;

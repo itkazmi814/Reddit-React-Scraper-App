@@ -2,7 +2,7 @@ import React from "react";
 
 const Search = props => (
 	<form class="col-6">
-		<div class="form-group d-inline-block">
+		<div class="form-group d-inline-block mr-2">
 			<label for="exampleInputEmail1">Topic</label>
 			<input
 				value={props.search.topic}
@@ -12,17 +12,6 @@ const Search = props => (
 				id="exampleInputEmail1"
 				aria-describedby="emailHelp"
 				placeholder="Enter topic"
-			/>
-		</div>
-		<div class="form-group d-inline-block">
-			<label for="exampleInputPassword1">Subreddit</label>
-			<input
-				value={props.search.subreddit}
-				onChange={props.handleInputChange}
-				name="subreddit"
-				class="form-control"
-				id="exampleInputPassword1"
-				placeholder="Enter subreddit"
 			/>
 		</div>
 		<button
